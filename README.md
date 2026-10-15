@@ -1,96 +1,76 @@
-# SpendWise – Personal Finance Dashboard
+# SpendWise – Interactive Budget Dashboard
 
-## Project Description
+## 1. Project Description
 
-SpendWise is a personal finance dashboard built using HTML, CSS, and JavaScript. It helps users track their monthly budget, record expenses, monitor spending categories, and calculate their remaining balance.
+SpendWise is a personal finance dashboard developed using HTML, CSS, and JavaScript. It helps users monitor their monthly budget, record expenses, calculate spending, and track their remaining balance.
 
-## Features
+## 2. Improvements Made
 
-- Responsive dashboard layout.
-- Financial summary cards showing total budget, total spending, and remaining balance.
-- Expense form for entering descriptions, amounts, and categories.
-- Expense input validation.
-- Automatic calculation of total spending and remaining balance.
-- Automatic calculation of the percentage of the budget spent.
-- Spending categories: Food, Transport, Rent, Entertainment, Savings, Utilities, and Other.
-- Recent expenses list.
-- Browser storage using localStorage to retain expenses after refreshing the page.
-- Responsive layout using CSS Grid, Flexbox, and media queries.
-- CSS custom properties for consistent styling.
-- Hover and keyboard-focus effects.
-- Dark theme based on the user's system preference.
+The application was improved to support interactive expense management. Users can enter expense descriptions, amounts, and categories. The dashboard updates financial totals and category spending when a new expense is added. Expense records are saved in browser storage.
 
-## Technologies Used
+## 3. JavaScript Concepts Used
+
+### Conditional Statements
+
+Conditional statements validate expense details and check whether an expense exceeds the remaining budget. They provide appropriate feedback to the user.
+
+### Arrays and Objects
+
+An array stores multiple expense records. Each expense is represented by an object containing its description, amount, and category.
+
+### Loops
+
+Loops process saved expense records, calculate total spending, and update the spending categories.
+
+### DOM Manipulation
+
+JavaScript updates the total budget, total spent, remaining balance, spending percentage, category totals, and recent expense list directly on the webpage.
+
+### Event Listeners
+
+An event listener handles the expense form submission. It reads user input, validates the details, saves the record, and updates the dashboard without reloading the page.
+
+### Browser Storage
+
+The localStorage feature saves expense records in the browser so they can be restored after refreshing the page.
+
+## 4. Testing
+
+The application can be tested by:
+
+1. Adding an expense with valid details.
+2. Checking that the dashboard totals update correctly.
+3. Trying an invalid expense amount.
+4. Attempting to enter an expense greater than the remaining budget.
+5. Adding expenses in different categories.
+6. Refreshing the page to check whether saved expenses remain available.
+
+## 5. Challenges and Solutions
+
+One challenge was ensuring that the category totals and dashboard figures remained consistent. The JavaScript was organized into functions to calculate expenses and update the displayed information.
+
+Another challenge was connecting the HTML elements to the correct JavaScript selectors. Matching element IDs and checking the stylesheet filename helps the files work together correctly.
+
+## 6. Technologies Used
 
 - HTML5
 - CSS3
 - JavaScript
-- DOM manipulation
-- JavaScript variables and data types
-- Objects and arrays
-- Functions
-- Event listeners
+- Arrays and objects
 - Conditional statements
-- Arithmetic operations
-- Input validation
+- Loops
+- DOM manipulation
+- Event listeners
 - localStorage
-- CSS Grid and Flexbox
 
-## Project Files
-
-- `index.html` – Contains the dashboard structure and expense form.
-- `style.css` – Contains the dashboard styling, responsive layout, and visual effects.
-- `script.js` – Handles expense input, validation, calculations, category totals, dashboard updates, and browser storage.
-- `README.md` – Documents the project, features, technologies, and instructions.
-
-## How to Run
+## 7. How to Run the Project
 
 1. Download or clone the project repository.
-2. Open the project folder.
-3. Open `index.html` in a web browser.
+2. Open the project folder in Visual Studio Code.
+3. Open index.html in a web browser.
 4. Enter an expense description, amount, and category.
-5. Click the Add Expense button.
-6. Check the updated summary cards and recent expenses list.
-7. Refresh the page to test whether saved expenses remain available.
+5. Click Add Expense to update the dashboard.
 
-## JavaScript Concepts Demonstrated
-
-### Variables and Data Types
-
-Variables store the budget, total spending, remaining balance, category amounts, and expense information.
-
-### User Input
-
-The expense form collects the expense description, amount, and category from the user.
-
-### Calculations
-
-JavaScript calculates total spending, remaining balance, category totals, and the percentage of the budget spent.
-
-### Functions
-
-Functions organize reusable operations, including formatting currency, updating the dashboard, updating category totals, and restoring saved expenses.
-
-### DOM Manipulation
-
-JavaScript updates dashboard figures and adds expense entries to the webpage without requiring a full page reload.
-
-### Arrays and Objects
-
-Objects represent individual expenses, while an array stores the expenses entered by the user.
-
-### Browser Storage
-
-The localStorage API saves expense records in the browser so they can be restored after a page refresh.
-
-## Testing
-
-The application can be tested by entering valid expenses, checking that invalid amounts are rejected, verifying that financial totals update, and refreshing the page to confirm that saved expenses are restored.
-
-## Sample Data
-
-The initial financial figures are fictional examples used for demonstration. The sample monthly budget is KSh 50,000.
-
-## Author
+## 8. Author
 
 Melchizedek Ekiru Ebenyo

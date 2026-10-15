@@ -37,11 +37,13 @@ const categoryDisplays = {
 // Update the category amounts on the webpage
 function updateCategoryDisplay() {
   for (const category in categoryDisplays) {
-    categoryDisplays[category].textContent =
-      formatMoney(categoryTotals[category]);
+    const display = categoryDisplays[category];
+
+    if (display) {
+      display.textContent = formatMoney(categoryTotals[category]);
+    }
   }
 }
-
 
 // Step 3: Display the stored data
 console.log("Total Budget:", totalBudget);
@@ -132,24 +134,25 @@ expenseForm.addEventListener("submit", function (event) {
   };
 
   expenses.push(newExpense);
-  // Add the expense to its category total
-categoryTotals[expenseCategory] += expenseAmount;
-updateCategoryDisplay();
-localStorage.setItem(
-  "spendWiseExpenses",
-  JSON.stringify(expenses)
-);
 
-// Refresh the category cards
-updateCategoryDisplay();
+  // Add the expense to its category total
+  categoryTotals[expenseCategory] += expenseAmount;
+  updateCategoryDisplay();
+
+  localStorage.setItem(
+    "spendWiseExpenses",
+    JSON.stringify(expenses)
+  );
+
+  // Refresh the category cards
+  updateCategoryDisplay();
 
   // Update financial calculations
-// Update financial calculations
-totalSpent += expenseAmount;
+  totalSpent += expenseAmount;
 
-// Refresh the dashboard cards
-updateDashboard();
-updateCategoryDisplay();
+  // Refresh the dashboard cards
+  updateDashboard();
+  updateCategoryDisplay();
 
   // Display the new expense safely
   const listItem = document.createElement("li");
