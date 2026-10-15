@@ -341,3 +341,87 @@ a {
     --shadow-color: rgba(0, 0, 0, 0.2);
   }
 }
+
+/* Expense Entry Form */
+.expense-entry,
+.expense-list-section {
+  margin-top: 30px;
+  padding: 25px;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+.expense-entry h2,
+.expense-list-section h2 {
+  margin-bottom: 8px;
+}
+
+.expense-entry > p {
+  color: var(--secondary-text-color);
+  margin-bottom: 20px;
+}
+
+#expense-form {
+  display: grid;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--surface-color);
+  color: var(--text-color);
+  font: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.expense-button {
+  padding: 13px 20px;
+  background: var(--brand-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.expense-button:hover {
+  opacity: 0.9;
+}
+
+#form-message {
+  min-height: 1.5em;
+  font-weight: bold;
+}
+
+#expense-list {
+  margin-top: 15px;
+  padding-left: 20px;
+}
+
+#expense-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+  overflow-wrap: anywhere;
+}
