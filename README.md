@@ -91,6 +91,9 @@ The application can be tested by entering valid expenses, checking that invalid 
 
 The initial financial figures are fictional examples used for demonstration. The sample monthly budget is KSh 50,000.
 
+## the live Netlify URL for spendwise
+https://unique-cobbler-3c4cd2.netlify.app/
+
 ## Author
 
 Melchizedek Ekiru Ebenyo
