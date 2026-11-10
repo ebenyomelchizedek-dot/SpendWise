@@ -1,30 +1,66 @@
 
 console.log("SpendWise JavaScript loaded successfully!");
 
-// Step 1: Store application data
-let totalBudget = 50000;
-let totalSpent = 32500;
-let remainingBalance = totalBudget - totalSpent;
+// Initial sample financial figures
+const totalBudget = 50000;
+const initialSpent = 32500;
 
-// Step 2: Store spending by category
-let foodExpenses = 8000;
-let transportExpenses = 4500;
-let rentExpenses = 12000;
-let entertainmentExpenses = 2500;
-let savingsAmount = 3500;
-let utilitiesExpenses = 2000;
-
-const categoryTotals = {
-  Food: foodExpenses,
-  Transport: transportExpenses,
-  Rent: rentExpenses,
-  Entertainment: entertainmentExpenses,
-  Savings: savingsAmount,
-  Utilities: utilitiesExpenses,
+// Initial category amounts
+const initialCategories = {
+  Food: 8000,
+  Transport: 4500,
+  Rent: 12000,
+  Entertainment: 2500,
+  Savings: 3500,
+  Utilities: 2000,
   Other: 0
 };
 
-// Find the amount displayed on each category card
+// Load saved expenses safely
+let expenses = [];
+
+try {
+  expenses = JSON.parse(
+    localStorage.getItem("spendWiseExpenses") || "[]"
+  );
+
+  if (!Array.isArray(expenses)) expenses = [];
+} catch {
+  expenses = [];
+}
+
+// Restore category totals
+const categoryTotals = { ...initialCategories };
+
+expenses.forEach(expense => {
+  if (
+    expense &&
+    categoryTotals[expense.category] !== undefined &&
+    Number.isFinite(Number(expense.amount))
+  ) {
+    categoryTotals[expense.category] += Number(expense.amount);
+  }
+});
+
+// Calculate total spending
+let totalSpent = initialSpent +
+  expenses.reduce((sum, expense) => sum + Number(expense.amount || 0), 0);
+
+let remainingBalance = totalBudget - totalSpent;
+
+// Find HTML elements
+const expenseForm = document.getElementById("expense-form");
+const expenseNameInput = document.getElementById("expense-name");
+const expenseAmountInput = document.getElementById("expense-amount");
+const expenseCategoryInput = document.getElementById("expense-category");
+const expenseList = document.getElementById("expense-list");
+const formMessage = document.getElementById("form-message");
+
+const totalBudgetDisplay = document.getElementById("total-budget");
+const totalSpentDisplay = document.getElementById("total-spent");
+const remainingBalanceDisplay = document.getElementById("remaining-balance");
+const spentPercentageDisplay = document.getElementById("spent-percentage");
+
 const categoryDisplays = {
   Food: document.getElementById("food-total"),
   Transport: document.getElementById("transport-total"),
@@ -34,7 +70,28 @@ const categoryDisplays = {
   Utilities: document.getElementById("utilities-total")
 };
 
-// Update the category amounts on the webpage
+// Format Kenyan currency
+function formatMoney(amount) {
+  return "KSh " + amount.toLocaleString("en-KE", {
+    maximumFractionDigits: 2
+  });
+}
+
+// Update financial summary
+function updateDashboard() {
+  remainingBalance = totalBudget - totalSpent;
+
+  totalBudgetDisplay.textContent = formatMoney(totalBudget);
+  totalSpentDisplay.textContent = formatMoney(totalSpent);
+  remainingBalanceDisplay.textContent = formatMoney(remainingBalance);
+
+  const percentage = (totalSpent / totalBudget) * 100;
+
+  spentPercentageDisplay.textContent =
+    percentage.toFixed(1) + "% of your budget";
+}
+
+// Update category cards
 function updateCategoryDisplay() {
   for (const category in categoryDisplays) {
     const display = categoryDisplays[category];
@@ -45,137 +102,83 @@ function updateCategoryDisplay() {
   }
 }
 
-// Step 3: Display the stored data
-console.log("Total Budget:", totalBudget);
-console.log("Total Spent:", totalSpent);
-console.log("Remaining Balance:", remainingBalance);
-console.log("Food Expenses:", foodExpenses);
-console.log("Transport Expenses:", transportExpenses);
-console.log("Rent Expenses:", rentExpenses);
-console.log("Entertainment Expenses:", entertainmentExpenses);
-console.log("Savings:", savingsAmount);
-console.log("Utilities:", utilitiesExpenses);
+// Display saved expenses
+function displayExpenses() {
+  expenseList.innerHTML = "";
 
-// Step 4: Collect and process user input
-const expenseForm = document.getElementById("expense-form");
-const expenseNameInput = document.getElementById("expense-name");
-const expenseAmountInput = document.getElementById("expense-amount");
-const expenseCategoryInput = document.getElementById("expense-category");
-const expenseList = document.getElementById("expense-list");
-const formMessage = document.getElementById("form-message");
+  if (expenses.length === 0) {
+    const item = document.createElement("li");
+    item.textContent = "No new expenses added yet.";
+    expenseList.appendChild(item);
+    return;
+  }
 
-// Store expenses entered by the user
-let expenses = JSON.parse(
-  localStorage.getItem("spendWiseExpenses") || "[]"
-);
+  expenses.forEach(expense => {
+    const item = document.createElement("li");
 
-const totalBudgetDisplay = document.getElementById("total-budget");
-const totalSpentDisplay = document.getElementById("total-spent");
-const remainingBalanceDisplay = document.getElementById("remaining-balance");
-const spentPercentageDisplay = document.getElementById("spent-percentage");
+    item.textContent =
+      `${expense.name} — ${formatMoney(Number(expense.amount))} (${expense.category})`;
 
-// Format money in Kenyan shillings
-function formatMoney(amount) {
-  return "KSh " + amount.toLocaleString("en-KE", {
-    maximumFractionDigits: 2
+    expenseList.appendChild(item);
   });
 }
 
-// Update the dashboard summary cards
-function updateDashboard() {
-  remainingBalance = totalBudget - totalSpent;
-
-  totalBudgetDisplay.textContent = formatMoney(totalBudget);
-  totalSpentDisplay.textContent = formatMoney(totalSpent);
-  remainingBalanceDisplay.textContent = formatMoney(remainingBalance);
-
-  const percentageSpent = totalBudget > 0
-    ? (totalSpent / totalBudget) * 100
-    : 0;
-
-  spentPercentageDisplay.textContent =
-    percentageSpent.toFixed(1) + "% of your budget";
+// Save expenses
+function saveExpenses() {
+  localStorage.setItem(
+    "spendWiseExpenses",
+    JSON.stringify(expenses)
+  );
 }
 
-// Display the initial financial figures
+// Display initial information
 updateDashboard();
+updateCategoryDisplay();
+displayExpenses();
 
-expenseForm.addEventListener("submit", function (event) {
+// Handle new expenses
+expenseForm.addEventListener("submit", function(event) {
   event.preventDefault();
 
-  // Collect input values
-  const expenseName = expenseNameInput.value.trim();
-  const expenseAmount = Number(expenseAmountInput.value);
-  const expenseCategory = expenseCategoryInput.value;
+  const name = expenseNameInput.value.trim();
+  const amount = Number(expenseAmountInput.value);
+  const category = expenseCategoryInput.value;
 
-  // Validate input
   if (
-    expenseName === "" ||
-    !Number.isFinite(expenseAmount) ||
-    expenseAmount <= 0 ||
-    expenseCategory === ""
+    !name ||
+    !Number.isFinite(amount) ||
+    amount <= 0 ||
+    !Object.hasOwn(categoryTotals, category)
   ) {
     formMessage.textContent = "Please enter valid expense details.";
     return;
   }
 
-  // Check the available budget
-  if (expenseAmount > remainingBalance) {
+  if (amount > remainingBalance) {
     formMessage.textContent =
       "This expense exceeds your remaining budget.";
     return;
   }
 
-  // Store the new expense
   const newExpense = {
-    name: expenseName,
-    amount: expenseAmount,
-    category: expenseCategory
+    name,
+    amount,
+    category
   };
 
   expenses.push(newExpense);
+  categoryTotals[category] += amount;
+  totalSpent += amount;
 
-  // Add the expense to its category total
-  categoryTotals[expenseCategory] += expenseAmount;
-  updateCategoryDisplay();
-
-  localStorage.setItem(
-    "spendWiseExpenses",
-    JSON.stringify(expenses)
-  );
-
-  // Refresh the category cards
-  updateCategoryDisplay();
-
-  // Update financial calculations
-  totalSpent += expenseAmount;
-
-  // Refresh the dashboard cards
+  saveExpenses();
   updateDashboard();
   updateCategoryDisplay();
-
-  // Display the new expense safely
-  const listItem = document.createElement("li");
-  listItem.textContent =
-    newExpense.name +
-    " — KSh " +
-    newExpense.amount.toLocaleString("en-KE") +
-    " (" +
-    newExpense.category +
-    ")";
-
-  if (expenses.length === 1) {
-    expenseList.innerHTML = "";
-  }
-
-  expenseList.appendChild(listItem);
+  displayExpenses();
 
   formMessage.textContent = "Expense added successfully!";
 
-  // Clear the form
   expenseForm.reset();
 
-  // Show updated calculations
   console.log("Total Spent:", totalSpent);
   console.log("Remaining Balance:", remainingBalance);
 });
